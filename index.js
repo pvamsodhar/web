@@ -1,14 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from 'eact';
+import ReactDOM from 'eact-dom';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { ThemeProvider } from './context/ThemeContext';
+import { NoteProvider } from './context/NoteContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider>
+      <NoteProvider>
+        <App />
+      </NoteProvider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-reportWebVitals();

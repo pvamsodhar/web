@@ -1,41 +1,49 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState, useEffect } from 'eact';
+import { Container, Row, Col, Button, Form, FormGroup, Label, Input } from 'eactstrap';
+import NoteList from './NoteList';
+import NoteForm from './NoteForm';
+import ToggleSwitch from './ToggleSwitch';
+import { useTheme } from './context/ThemeContext';
+import { useNotes } from './context/NoteContext';
 
 function App() {
-  const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+  const { notes, addNote, editNote, deleteNote } = useNotes();
+  const { theme } = useTheme();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setNotes([...notes, { text: newNote, id: Date.now() }]);
-    setNewNote('');
-  };
+  useEffect(() => {
+    const storedNotes = localStorage.getItem('notes');
+    if (storedNotes) {
+      addNote(JSON.parse(storedNotes));
+    }
+  }, []);
 
-  const handleDelete = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
+
+  const handleToggle = () => {
+    setDarkMode(!darkMode);
   };
 
   return (
-    <div className="App">
-      <h1>Notes App</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={newNote}
-          onChange={(event) => setNewNote(event.target.value)}
-          placeholder="Add a new note"
-        />
-        <button type="submit">Add</button>
-      </form>
-      <ul>
-        {notes.map((note) => (
-          <li key={note.id}>
-            {note.text}
-            <button onClick={() => handleDelete(note.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Container fluid className={darkMode? 'dark-mode' : ''}>
+      <Row>
+        <Col xs={12} sm={6} md={4} lg={3}>
+          <ToggleSwitch darkMode={darkMode} handleToggle={handleToggle} />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12} sm={6} md={4} lg={3}>
+          <NoteForm addNote={addNote} />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12} sm={6} md={4} lg={3}>
+          <NoteList notes={notes} editNote={editNote} deleteNote={deleteNote} />
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

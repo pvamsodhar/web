@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .dark-mode {
+    background-color: #212121;
+    color: #fff;
+  }
+  
+  .dark-mode-toggle-on {
+    background-color: #fff;
+    color: #212121;
+  }
+  
+  .dark-mode-toggle-off {
+    background-color: #212121;
+    color: #fff;
+  }
